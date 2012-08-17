@@ -15,7 +15,7 @@
 	io_iterator_t				fNewDeviceAddedIter;
 	io_iterator_t				fNewDeviceRemovedIter;
 	
-	IOUSBInterfaceInterface 	**fintf;
+	IOUSBInterfaceInterface245 	**fintf;
 	
 	UInt8						fBuffer[64];
 }
@@ -25,9 +25,9 @@
 - (id) initVendor:(SInt32)vendor product: (SInt32)product;
 - (void) dealloc;
 
-- (IOReturn) configureAnchorDevice:(IOUSBDeviceInterface**)dev;
-- (IOReturn) anchorWrite:(IOUSBDeviceInterface **)dev address:(UInt16)address length:(UInt16)length data:(UInt8*)data;
-- (IOReturn) findInterfaces:(IOUSBDeviceInterface**)dev;
+- (IOReturn) configureAnchorDevice:(IOUSBDeviceInterface245**)dev;
+- (IOReturn) anchorWrite:(IOUSBDeviceInterface245 **)dev address:(UInt16)address length:(UInt16)length data:(UInt8*)data;
+- (IOReturn) findInterfaces:(IOUSBDeviceInterface245**)dev;
 
 // --- CUSB機能の実装
 - (IOReturn) resetpipe:(UInt8)pipe;

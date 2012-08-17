@@ -35,6 +35,7 @@
 		8AF89C970A14914B0088CD25 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* usbtest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = usbtest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F511713015D8B93B00D228AB /* if_gimic_hid.cpp */ = {isa = PBXFileReference; fileEncoding = 2147483649; lastKnownFileType = sourcecode.cpp.cpp; name = if_gimic_hid.cpp; path = ../../../Dropbox/working/c86ctl/import/src/if_gimic_hid.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +104,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				F511713015D8B93B00D228AB /* if_gimic_hid.cpp */,
 				8ABA45CB0A087193000D77D6 /* defines.h */,
 				32CA4F630368D1EE00C91783 /* bbme_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,

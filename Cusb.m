@@ -103,7 +103,7 @@ bail:
 }
 
 
-- (IOReturn) configureAnchorDevice:(IOUSBDeviceInterface**)dev
+- (IOReturn) configureAnchorDevice:(IOUSBDeviceInterface245**)dev
 {
     UInt8							numConf;
     IOReturn						kr;
@@ -113,6 +113,7 @@ bail:
     if(!numConf) {
         return -1;
 	}
+	printf("Device has %d configurations\n", numConf);
     
     // コンフィグレーション・ディスクリプタを取得する。
     kr = (*dev)->GetConfigurationDescriptorPtr(dev, 0, &confDesc);
@@ -128,7 +129,7 @@ bail:
 }
 
 
-- (IOReturn) anchorWrite:(IOUSBDeviceInterface **)dev address:(UInt16)address length:(UInt16)length data:(UInt8*)data
+- (IOReturn) anchorWrite:(IOUSBDeviceInterface245 **)dev address:(UInt16)address length:(UInt16)length data:(UInt8*)data
 {
     IOUSBDevRequest request;
     request.bmRequestType = USBmakebmRequestType(kUSBOut, kUSBVendor, kUSBDevice);
@@ -148,14 +149,14 @@ bail:
 0x47, 0x14, 0x1a, 0x01, 0x15, 0xf5, 0x4b, 0xf5,			\
 0x95, 0x54, 0xca, 0x7a, 0xac, 0xd5, 0x4b, 0xb8)
 
-- (IOReturn) findInterfaces:(IOUSBDeviceInterface**)dev
+- (IOReturn) findInterfaces:(IOUSBDeviceInterface245**)dev
 {
     IOReturn					kr;
     IOUSBFindInterfaceRequest	request;
     io_iterator_t				iterator;
     io_service_t				usbInterface;
     IOCFPlugInInterface			**plugInInterface = NULL;
-    IOUSBInterfaceInterface 	**intf = NULL;
+    IOUSBInterfaceInterface245 	**intf = NULL;
     HRESULT						res;
     SInt32						score;
     
@@ -174,25 +175,32 @@ bail:
         }
             
         // デバイス・インターフェースから、さらにインターフェースを取得する。
-        res = (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBInterfaceInterfaceID), (LPVOID) &intf);
+        res = (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBInterfaceInterfaceID245), (LPVOID) &intf);
         (*plugInInterface)->Release(plugInInterface);
         if(res || !intf) {
             break;
         }
 		fintf = intf;
         
+		// HIDインターフェースだけを処理する。
+		UInt8	interfaceClass=-1;
+		(*intf)->GetInterfaceClass(intf, &interfaceClass);
+		printf("interfaceClass : %d\n", interfaceClass );
+		if ( interfaceClass != 3 ) {	//HID Class
+            continue;
+		}
+		
 		// インターフェースをオープンする。
         kr = (*intf)->USBInterfaceOpen(intf);
         if(kIOReturnSuccess != kr) {
-			/*
+			
 			NSLog(@"USBInterfaceOpen error.");
 			[self printErr:kr];
-			*/
+			
             (void) (*intf)->Release(intf);
             continue;
         }
 		
-		// 最初に見つかったインターフェースだけを処理する。
 		//Get the number of endpoints associated with this interface
 		UInt8                       interfaceNumEndpoints;
         kr = (*intf)->GetNumEndpoints(intf, &interfaceNumEndpoints);
@@ -335,7 +343,7 @@ static void NewDeviceAdded(void *refCon, io_iterator_t iterator)
     kern_return_t			kr;
     io_service_t			usbDevice;
     IOCFPlugInInterface 	**plugInInterface=NULL;
-    IOUSBDeviceInterface 	**dev=NULL;
+    IOUSBDeviceInterface245 **dev=NULL;
     HRESULT					res;
     SInt32					score;
 	int						exclusiveErr = 0;
@@ -349,7 +357,7 @@ static void NewDeviceAdded(void *refCon, io_iterator_t iterator)
         }
             
         // デバイス・プラグインからデバイス・インターフェースを取得する。
-        res = (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID), (LPVOID)&dev);
+        res = (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID245), (LPVOID)&dev);
         (*plugInInterface)->Release(plugInInterface);
         if (res || !dev) {
 			NSLog(@"NewDeviceAdded : QueryInterface error.");
