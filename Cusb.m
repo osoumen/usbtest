@@ -141,13 +141,6 @@ bail:
     return (*dev)->DeviceRequest(dev, &request);
 }
 
-#define IID_IGimic CFUUIDGetConstantUUIDWithBytes(NULL,	\
-0x17, 0x5c, 0x7d, 0xa0, 0x8a, 0xa5, 0x41, 0x73,			\
-0x96, 0xda, 0xbb, 0x43, 0xb8, 0xeb, 0x8f, 0x17)
-
-#define IID_IGimic2 CFUUIDGetConstantUUIDWithBytes(NULL,\
-0x47, 0x14, 0x1a, 0x01, 0x15, 0xf5, 0x4b, 0xf5,			\
-0x95, 0x54, 0xca, 0x7a, 0xac, 0xd5, 0x4b, 0xb8)
 
 - (IOReturn) findInterfaces:(IOUSBDeviceInterface245**)dev
 {
@@ -183,12 +176,13 @@ bail:
 		fintf = intf;
         
 		// HIDインターフェースだけを処理する。
+		/*
 		UInt8	interfaceClass=-1;
 		(*intf)->GetInterfaceClass(intf, &interfaceClass);
 		printf("interfaceClass : %d\n", interfaceClass );
 		if ( interfaceClass != 3 ) {	//HID Class
             continue;
-		}
+		}*/
 		
 		// インターフェースをオープンする。
         kr = (*intf)->USBInterfaceOpen(intf);

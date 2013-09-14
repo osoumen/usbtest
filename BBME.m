@@ -14,7 +14,7 @@
 #import "BBME.h"
 
 #define GIMIC_USBVID 0x16c0
-#define GIMIC_USBPID 0x05e4
+#define GIMIC_USBPID 0x05e5
 
 @implementation BBME
 
